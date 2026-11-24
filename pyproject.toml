@@ -1,7 +1,7 @@
 [project]
 name = "customer-churn-ml"
 version = "0.1.0"
-description = "Add your description here"
+description = "A reproducible machine learning system for customer churn risk ranking under limited outreach capacity."
 readme = "README.md"
 authors = [
     { name = "Xuefei Yu" }

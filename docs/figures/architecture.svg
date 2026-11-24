@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 470" width="980" height="470" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>Customer churn ML: training and inference architecture (illustrative diagram)</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#52514e"/>
+    </marker>
+    <style>
+      .box { fill: #ffffff; stroke: #b5b4ae; stroke-width: 1.5; }
+      .pipe { fill: #e8f1fc; stroke: #2a78d6; stroke-width: 1.5; }
+      .step { fill: #ffffff; stroke: #86b6ef; stroke-width: 1; }
+      .t { fill: #0b0b0b; font-size: 14px; font-weight: 600; }
+      .s { fill: #52514e; font-size: 12px; }
+      .h { fill: #0b0b0b; font-size: 15px; font-weight: 700; }
+      .m { fill: #0b0b0b; font-size: 12px; font-family: ui-monospace, Menlo, Consolas, monospace; }
+      .edge { stroke: #52514e; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+      .lbl { fill: #52514e; font-size: 11px; }
+    </style>
+  </defs>
+  <rect width="980" height="470" fill="#fcfcfb"/>
+
+  <!-- ===== Training ===== -->
+  <text x="24" y="32" class="h">Training · python -m customer_churn_ml.training</text>
+  <text x="956" y="32" text-anchor="end" class="lbl">Illustrative diagram · not a measured result</text>
+
+  <rect x="24" y="80" width="104" height="64" rx="8" class="box"/>
+  <text x="76" y="108" text-anchor="middle" class="t">Raw CSV</text>
+  <text x="76" y="127" text-anchor="middle" class="s">7,043 × 21</text>
+
+  <rect x="152" y="80" width="124" height="64" rx="8" class="box"/>
+  <text x="214" y="108" text-anchor="middle" class="t">load_raw</text>
+  <text x="214" y="127" text-anchor="middle" class="s">integrity checks</text>
+
+  <rect x="300" y="80" width="140" height="64" rx="8" class="box"/>
+  <text x="370" y="104" text-anchor="middle" class="t">Stratified split</text>
+  <text x="370" y="122" text-anchor="middle" class="s">80 / 20 · seed 42</text>
+  <text x="370" y="138" text-anchor="middle" class="s">Churn → 0/1</text>
+
+  <path d="M128 112 H148" class="edge"/>
+  <path d="M276 112 H296" class="edge"/>
+
+  <!-- Pipeline (fit on the training split only) -->
+  <path d="M440 100 H536" class="edge"/>
+  <text x="446" y="92" class="lbl">fit · train 5,634</text>
+
+  <rect x="540" y="52" width="250" height="176" rx="10" class="pipe"/>
+  <text x="556" y="76" class="t">sklearn Pipeline (persisted)</text>
+  <rect x="556" y="88" width="218" height="38" rx="6" class="step"/>
+  <text x="568" y="112" class="m">clean_features</text>
+  <rect x="556" y="132" width="218" height="38" rx="6" class="step"/>
+  <text x="568" y="156" class="m">ColumnTransformer</text>
+  <text x="762" y="156" text-anchor="end" class="lbl">40 features</text>
+  <rect x="556" y="176" width="218" height="38" rx="6" class="step"/>
+  <text x="568" y="200" class="m">RandomForest</text>
+  <text x="762" y="200" text-anchor="end" class="lbl">300 trees</text>
+
+  <!-- Holdout evaluation -->
+  <rect x="540" y="262" width="250" height="72" rx="8" class="box"/>
+  <text x="665" y="286" text-anchor="middle" class="t">Holdout evaluation</text>
+  <text x="665" y="305" text-anchor="middle" class="s">1,409 rows · predict only</text>
+  <text x="665" y="322" text-anchor="middle" class="s">AP · ROC AUC · P@100 · Lift@100</text>
+  <path d="M440 128 C 490 128, 490 298, 536 298" class="edge"/>
+  <path d="M665 228 V258" class="edge"/>
+
+  <!-- Out-of-fold on the training split -->
+  <rect x="300" y="262" width="140" height="72" rx="8" class="box"/>
+  <text x="370" y="290" text-anchor="middle" class="t">Out-of-fold</text>
+  <text x="370" y="309" text-anchor="middle" class="s">5-fold CV on train</text>
+  <text x="370" y="325" text-anchor="middle" class="s">P@400 · Lift@400</text>
+  <path d="M370 144 V258" class="edge" stroke-dasharray="4 3"/>
+
+  <!-- Persistence -->
+  <rect x="826" y="52" width="130" height="72" rx="8" class="box"/>
+  <text x="891" y="80" text-anchor="middle" class="t">save_model</text>
+  <text x="891" y="98" text-anchor="middle" class="s">.joblib + .json</text>
+  <text x="891" y="114" text-anchor="middle" class="s">metadata</text>
+  <rect x="826" y="156" width="130" height="72" rx="8" class="box"/>
+  <text x="891" y="184" text-anchor="middle" class="t">load_model</text>
+  <text x="891" y="202" text-anchor="middle" class="s">prediction</text>
+  <text x="891" y="218" text-anchor="middle" class="s">parity check</text>
+  <path d="M790 88 H822" class="edge"/>
+  <path d="M891 124 V152" class="edge"/>
+
+  <!-- ===== Inference ===== -->
+  <line x1="24" y1="362" x2="956" y2="362" stroke="#e6e5e0" stroke-width="1.5"/>
+  <text x="24" y="390" class="h">Inference (Python library use · no API yet)</text>
+
+  <rect x="24" y="404" width="190" height="52" rx="8" class="box"/>
+  <text x="119" y="435" text-anchor="middle" class="t">Raw customer rows</text>
+  <rect x="254" y="404" width="160" height="52" rx="8" class="box"/>
+  <text x="334" y="435" text-anchor="middle" class="t">load_model</text>
+  <rect x="454" y="404" width="230" height="52" rx="8" class="pipe"/>
+  <text x="569" y="435" text-anchor="middle" class="t">Pipeline → risk score</text>
+  <rect x="724" y="404" width="232" height="52" rx="8" class="box"/>
+  <text x="840" y="435" text-anchor="middle" class="t">Ranked list → top K</text>
+  <path d="M214 430 H250" class="edge"/>
+  <path d="M414 430 H450" class="edge"/>
+  <path d="M684 430 H720" class="edge"/>
+</svg>
