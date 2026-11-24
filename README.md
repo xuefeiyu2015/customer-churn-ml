@@ -1,10 +1,20 @@
 # Customer Churn Risk Ranking
 
-[![Open Quickstart In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/xuefeiyu2015/customer-churn-ml/blob/main/notebooks/quickstart.ipynb)
-&nbsp;Quickstart: train, evaluate and predict with the package
-&nbsp;·&nbsp; [Analysis notebook](notebooks/churn_analysis.ipynb): EDA and model selection
+[![Python 3.13](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-F7931E?logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter&logoColor=white)](https://jupyter.org/)
+[![uv](https://img.shields.io/badge/uv-Package%20Manager-DE5FE9?logo=uv&logoColor=white)](https://docs.astral.sh/uv/)
+[![Tests](https://img.shields.io/badge/Tests-41%20passed-2EA44F?logo=pytest&logoColor=white)](tests/)
+
+A reproducible machine learning system for customer churn risk ranking under limited outreach capacity.
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/xuefeiyu2015/customer-churn-ml/blob/main/notebooks/quickstart.ipynb) &nbsp;📖 [Explore Analysis Notebook](notebooks/churn_analysis.ipynb)
+
+## Project Overview
 
 A reproducible ML training package that **ranks telecom customers by churn risk**, so a retention team that can only contact **500 of 7,043 customers** knows whom to call first. The workflow started as an exploratory notebook and was refactored into a tested Python package with a persisted end-to-end sklearn Pipeline.
+
+## Key Results
 
 | Holdout metric (1,409 customers) | Result |
 |---|---|
